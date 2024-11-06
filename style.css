@@ -1,3 +1,4 @@
+/* style.css */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -7,53 +8,57 @@ body {
 
 header {
     background-color: #333;
-    color: white;
-    padding: 10px 0;
+    padding: 10px;
     text-align: center;
 }
 
-nav ul {
+header ul {
     list-style-type: none;
     padding: 0;
 }
 
-nav ul li {
+header ul li {
     display: inline;
-    margin-right: 20px;
+    margin: 0 10px;
+}
+
+header ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+h2 {
+    color: #333;
 }
 
 button {
-    padding: 10px 20px;
-    margin-top: 20px;
-    cursor: pointer;
     background-color: #4CAF50;
     color: white;
+    padding: 10px 20px;
+    margin: 10px;
     border: none;
-    border-radius: 5px;
+    cursor: pointer;
 }
 
 button:hover {
     background-color: #45a049;
 }
 
-#loginRegister {
+#loginForm {
     text-align: center;
+    margin-top: 50px;
 }
 
-#registerFormDiv, #loginFormDiv {
-    margin-top: 20px;
-    text-align: center;
-}
-
-#userDetails {
-    text-align: center;
-    margin-top: 20px;
-}
-
-input[type="text"], input[type="password"] {
+#loginForm input {
     padding: 10px;
     margin: 5px;
-    width: 200px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+}
+
+#userDashboard {
+    text-align: center;
+    margin-top: 50px;
+}
+
+#miningTimer {
+    font-weight: bold;
 }
