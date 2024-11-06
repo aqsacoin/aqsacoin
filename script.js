@@ -1,76 +1,100 @@
-// Setup Mining Timer (24 hours)
-let miningTimer;
-let miningDuration = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-let miningStartTime = 0;
-let minedCoins = 0;
+// Global Variables
+let isMining = false;
+let miningInterval;
+let miningTime = 86400; // 24 hours in seconds
 
-function startMining() {
-    miningStartTime = Date.now();
-    updateMiningTimer();
-    document.getElementById('startMiningButton').disabled = true;
-    setInterval(updateMiningTimer, 1000); // Update every second
-}
+// Event Listeners for Buttons
+document.getElementById('registerButton').addEventListener('click', function() {
+    alert('You clicked Register button!');
+    // Implement registration functionality here
+});
 
-function updateMiningTimer() {
-    let elapsedTime = Date.now() - miningStartTime;
-    if (elapsedTime >= miningDuration) {
-        minedCoins += 3; // Add 3 coins after each mining cycle
-        miningStartTime = Date.now(); // Reset the timer
-        alert('Mining cycle complete! You mined 3 coins.');
-    }
+document.getElementById('loginButton').addEventListener('click', function() {
+    alert('You clicked Login button!');
+    // Implement login functionality here
+});
 
-    let remainingTime = miningDuration - elapsedTime;
-    let hours = Math.floor(remainingTime / (1000 * 60 * 60));
-    let minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-    let seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+document.getElementById('generateWalletButton').addEventListener('click', function() {
+    generateWallet();
+});
 
-    document.getElementById('miningTimer').innerText = `${hours}:${minutes}:${seconds}`;
-    document.getElementById('minedCoins').innerText = `Coins Mined: ${minedCoins}`;
-}
+document.getElementById('restoreWalletButton').addEventListener('click', function() {
+    restoreWallet();
+});
 
-document.getElementById('startMiningButton').addEventListener('click', startMining);
+document.getElementById('startMiningButton').addEventListener('click', function() {
+    startMining();
+});
 
-// Wallet generation and restore functions
-function generateRecoveryWords() {
-    const bip39 = require('bip39'); // Assuming BIP39 is included
-    return bip39.generateMnemonic();
-}
-
+// Function to generate wallet with 12 recovery words
 function generateWallet() {
-    const recoveryWords = generateRecoveryWords();
-    const walletAddress = generateWalletAddress(); // Use your blockchain-specific wallet generation logic
-
-    // Display wallet details
-    document.getElementById('walletAddress').innerText = walletAddress;
-    document.getElementById('recoveryWords').innerText = recoveryWords;
-
-    // Store wallet info
-    localStorage.setItem('walletAddress', walletAddress);
-    localStorage.setItem('recoveryWords', recoveryWords);
-
-    // Show wallet info section
-    document.getElementById('walletInfo').style.display = 'block';
+    let recoveryWords = generateRecoveryWords();
+    alert('Your wallet has been created with the following recovery words:\n' + recoveryWords);
+    document.getElementById('walletAddress').innerText = 'Your address: ' + generateRandomAddress();
+    document.getElementById('walletBalance').innerText = 'Balance: 0 Coins';
 }
 
+// Function to restore wallet using recovery words
 function restoreWallet() {
-    const recoveryWords = prompt('Enter your 12 recovery words:');
-    if (recoveryWords) {
-        const walletAddress = restoreWalletAddressFromWords(recoveryWords); // Blockchain-specific logic
-        document.getElementById('walletAddress').innerText = walletAddress;
-        document.getElementById('recoveryWords').innerText = recoveryWords;
+    let recoveryWords = prompt('Please enter your recovery words to restore your wallet:');
+    alert('Your wallet has been restored!');
+    // Implement wallet restoration logic here
+    document.getElementById('walletAddress').innerText = 'Your address: ' + generateRandomAddress();
+}
 
-        // Show wallet info section
-        document.getElementById('walletInfo').style.display = 'block';
+// Function to start mining
+function startMining() {
+    if (isMining) {
+        alert('Mining is already in progress!');
+        return;
     }
+
+    isMining = true;
+    document.getElementById('miningStatus').innerText = 'Mining in progress...';
+    startMiningTimer();
 }
 
-function generateWalletAddress() {
-    return '0x' + Math.random().toString(16).substr(2, 40); // Simulate an address
+// Function to start mining timer (24 hours)
+function startMiningTimer() {
+    miningInterval = setInterval(function() {
+        if (miningTime <= 0) {
+            clearInterval(miningInterval);
+            document.getElementById('miningStatus').innerText = 'Mining Completed!';
+            document.getElementById('walletBalance').innerText = 'Balance: ' + (parseInt(document.getElementById('walletBalance').innerText.split(' ')[1]) + 3) + ' Coins';
+            isMining = false;
+        } else {
+            miningTime--;
+            updateMiningTimerDisplay();
+        }
+    }, 1000);
 }
 
-function restoreWalletAddressFromWords(recoveryWords) {
-    return '0x' + Math.random().toString(16).substr(2, 40); // Simulate address restoration
+// Function to update mining timer display
+function updateMiningTimerDisplay() {
+    let hours = Math.floor(miningTime / 3600);
+    let minutes = Math.floor((miningTime % 3600) / 60);
+    let seconds = miningTime % 60;
+
+    document.getElementById('miningTimer').innerText = 'Time Remaining: ' + formatTime(hours) + ':' + formatTime(minutes) + ':' + formatTime(seconds);
 }
 
-document.getElementById('generateWalletButton').addEventListener('click', generateWallet);
-document.getElementById('restoreWalletButton').addEventListener('click', restoreWallet);
+// Function to format time as two digits
+function formatTime(time) {
+    return time < 10 ? '0' + time : time;
+}
+
+// Utility function to generate 12 random recovery words (for demonstration)
+function generateRecoveryWords() {
+    let words = ['apple', 'banana', 'cherry', 'date', 'elderberry', 'fig', 'grape', 'honeydew', 'kiwi', 'lemon', 'mango', 'nectarine'];
+    let recoveryWords = [];
+    for (let i = 0; i < 12; i++) {
+        let randomIndex = Math.floor(Math.random() * words.length);
+        recoveryWords.push(words[randomIndex]);
+    }
+    return recoveryWords.join(' ');
+}
+
+// Utility function to generate a random wallet address
+function generateRandomAddress() {
+    return '0x' + Math.random().toString(36).substring(2, 15);
+}
