@@ -1,216 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aqsacoin</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-
-        h1 {
-            color: #4CAF50;
-            font-size: 36px;
-        }
-
-        p {
-            font-size: 18px;
-            color: #555;
-            margin: 20px 0;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 30px;
-            margin: 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .content {
-            text-align: right;
-        }
-
-        /* تحسين الشكل في حال كانت اللغة العربية */
-        .arabic .content {
-            text-align: left;
-        }
-
-        /* لعرض الأزرار في أعلى الصفحة */
-        .language-select {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-        }
-
-        .login-container {
-            margin-top: 40px;
-        }
-
-        input {
-            padding: 10px;
-            font-size: 16px;
-            margin: 10px 0;
-            width: 100%;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .auth-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .auth-buttons button {
-            width: 180px;
-            margin: 10px;
-        }
-
-    </style>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <title>AqsaCoin</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <!-- حاوية اختيار اللغة -->
-    <div class="language-select">
-        <button onclick="changeLanguage('en')">English</button>
-        <button onclick="changeLanguage('ar')">العربية</button>
-    </div>
-
-    <!-- حاوية المحتوى -->
-    <div class="container" id="content-container">
-        <h1 id="title">Welcome to Aqsacoin</h1>
-        <div class="content">
-            <p id="description">Start mining now by clicking the button below:</p>
-            <button id="start-mining-button">Start Mining</button>
+    <div class="container">
+        <h1>مرحبًا بكم في AqsaCoin</h1>
+        <button onclick="showRegister()">التسجيل</button>
+        <button onclick="showLogin()">تسجيل الدخول</button>
+        <div id="registerForm" style="display: none;">
+            <h2>التسجيل</h2>
+            <input type="text" id="registerUsername" placeholder="اسم المستخدم">
+            <input type="password" id="registerPassword" placeholder="كلمة المرور">
+            <button onclick="register()">إكمال التسجيل</button>
         </div>
-
-        <!-- نموذج التسجيل وتسجيل الدخول -->
-        <div class="login-container" id="login-container">
-            <h2 id="auth-title">Login or Register</h2>
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button onclick="login()">Login</button>
-            <button onclick="register()">Register</button>
-
-            <!-- تسجيل الدخول عبر فيسبوك وجوجل -->
-            <div class="auth-buttons">
-                <button onclick="googleLogin()">Login with Google</button>
-                <button onclick="facebookLogin()">Login with Facebook</button>
-            </div>
+        <div id="loginForm" style="display: none;">
+            <h2>تسجيل الدخول</h2>
+            <input type="text" id="loginUsername" placeholder="اسم المستخدم">
+            <input type="password" id="loginPassword" placeholder="كلمة المرور">
+            <button onclick="login()">تسجيل الدخول</button>
         </div>
     </div>
-
-    <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-
-        // تحميل اللغة من localStorage أو تعيين اللغة الافتراضية الإنجليزية
-        let currentLanguage = localStorage.getItem('language') || 'en';
-        document.documentElement.lang = currentLanguage;
-        changeContent(currentLanguage);
-
-        // تغيير اللغة
-        function changeLanguage(language) {
-            localStorage.setItem('language', language);
-            document.documentElement.lang = language;
-            changeContent(language);
-        }
-
-        // تغيير محتويات الصفحة بناءً على اللغة المختارة
-        function changeContent(language) {
-            if (language === 'en') {
-                document.getElementById('title').textContent = 'Welcome to Aqsacoin';
-                document.getElementById('description').textContent = 'Start mining now by clicking the button below:';
-                document.getElementById('start-mining-button').textContent = 'Start Mining';
-                document.getElementById('auth-title').textContent = 'Login or Register';
-            } else if (language === 'ar') {
-                document.getElementById('title').textContent = 'مرحباً بك في أقصى كوين';
-                document.getElementById('description').textContent = 'ابدأ التعدين الآن من خلال النقر على الزر أدناه:';
-                document.getElementById('start-mining-button').textContent = 'ابدأ التعدين';
-                document.getElementById('auth-title').textContent = 'تسجيل الدخول أو التسجيل';
-            }
-        }
-
-        // تسجيل الدخول باستخدام البريد الإلكتروني وكلمة المرور
-        function login() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
-                alert('Logged in successfully');
-            }).catch((error) => {
-                alert('Error: ' + error.message);
-            });
-        }
-
-        // التسجيل باستخدام البريد الإلكتروني وكلمة المرور
-        function register() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
-                alert('Registered successfully');
-            }).catch((error) => {
-                alert('Error: ' + error.message);
-            });
-        }
-
-        // تسجيل الدخول باستخدام جوجل
-        function googleLogin() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).then((result) => {
-                alert('Logged in with Google');
-            }).catch((error) => {
-                alert('Error: ' + error.message);
-            });
-        }
-
-        // تسجيل الدخول باستخدام فيسبوك
-        function facebookLogin() {
-            const provider = new firebase.auth.FacebookAuthProvider();
-            auth.signInWithPopup(provider).then((result) => {
-                alert('Logged in with Facebook');
-            }).catch((error) => {
-                alert('Error: ' + error.message);
-            });
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
-
 </html>
