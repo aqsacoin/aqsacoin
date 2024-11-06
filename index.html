@@ -23,36 +23,29 @@
         <h1>Welcome to AqsaCoin</h1>
         <p>Your cryptocurrency mining site</p>
 
-        <!-- Register & Login Buttons -->
         <div class="buttons">
             <button id="registerButton">Register</button>
             <button id="loginButton">Login</button>
         </div>
 
-        <!-- Wallet Generation Section -->
-        <div id="walletSection">
-            <button id="generateWalletButton">Generate Wallet</button>
-            <button id="restoreWalletButton">Restore Wallet</button>
-            <div id="recoveryWordsSection" style="display: none;">
-                <h3>Your Recovery Words</h3>
-                <textarea id="recoveryWords" rows="3" cols="30" readonly></textarea>
-                <button id="copyRecoveryWordsButton">Copy Recovery Words</button>
-            </div>
+        <!-- Register Form (Hidden by default) -->
+        <div id="registerForm" style="display: none;">
+            <h2>Register</h2>
+            <form id="registerFormData">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+                
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+                
+                <button type="submit">Register</button>
+            </form>
         </div>
 
-        <!-- Mining Section -->
-        <div id="miningSection">
-            <button id="startMiningButton">Start Mining</button>
-            <p id="miningStatus">Mining not started.</p>
-            <p id="miningTimer">Time Remaining: 24:00:00</p>
-        </div>
-
-        <!-- Wallet Information -->
-        <div id="walletInfo">
-            <h3>Your Wallet:</h3>
-            <p id="walletAddress">Your address: N/A</p>
-            <p id="walletBalance">Balance: 0 Coins</p>
-        </div>
+        <div id="message"></div>
     </section>
 
     <script src="script.js"></script>
