@@ -1,77 +1,107 @@
-// Script.js
+// Get elements
+const registerButton = document.getElementById('registerButton');
+const loginButton = document.getElementById('loginButton');
+const startMiningButton = document.getElementById('startMiningButton');
+const coinBalanceElement = document.getElementById('coinBalance');
+const miningTimeLeftElement = document.getElementById('miningTimeLeft');
 
-// تأكد من تسجيل الدخول عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', function () {
-    if (localStorage.getItem('loggedIn') === 'true') {
-        showUserDashboard();
+// Load user data from localStorage if available
+let coinBalance = parseInt(localStorage.getItem('coinBalance')) || 0; // Default to 0 if no data
+let miningTimer;
+let miningDuration = 5 * 60; // 5 minutes for mining (in seconds)
+
+// Display initial coin balance
+coinBalanceElement.textContent = coinBalance;
+
+// Check if the user is already logged in
+if (localStorage.getItem('isLoggedIn') === 'true') {
+    // User is logged in, show mining section
+    showMiningSection();
+} else {
+    // User is not logged in, show login/register buttons
+    showLoginRegisterSection();
+}
+
+// Event listener for the "Register" button
+registerButton.addEventListener('click', function() {
+    const username = prompt("Enter your username for registration:");
+    const password = prompt("Enter your password for registration:");
+
+    if (username && password) {
+        localStorage.setItem('username', username);
+        localStorage.setItem('password', password);
+        alert("Registration successful!");
+        showLoginRegisterSection(); // Switch to login screen after registration
+    } else {
+        alert("Both fields are required.");
     }
 });
 
-// تسجيل الدخول
-function login() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+// Event listener for the "Login" button
+loginButton.addEventListener('click', function() {
+    const storedUsername = localStorage.getItem('username');
+    const storedPassword = localStorage.getItem('password');
+    const username = prompt("Enter your username to login:");
+    const password = prompt("Enter your password to login:");
 
-    if (username && password) {
-        // تخزين بيانات تسجيل الدخول في localStorage
-        localStorage.setItem('username', username);
-        localStorage.setItem('loggedIn', 'true');
-        showUserDashboard();
+    if (username === storedUsername && password === storedPassword) {
+        localStorage.setItem('isLoggedIn', 'true');
+        alert("Login successful!");
+        showMiningSection(); // Show mining section after login
     } else {
-        alert('Please fill in all fields');
+        alert("Incorrect username or password.");
     }
+});
+
+// Function to show the mining section
+function showMiningSection() {
+    document.querySelector('.user-actions').style.display = 'none';
+    document.querySelector('.dashboard').style.display = 'flex';
 }
 
-// تسجيل الخروج
-function logout() {
-    localStorage.removeItem('username');
-    localStorage.removeItem('loggedIn');
-    hideUserDashboard();
+// Function to show the login/register section
+function showLoginRegisterSection() {
+    document.querySelector('.user-actions').style.display = 'block';
+    document.querySelector('.dashboard').style.display = 'none';
 }
 
-// إظهار واجهة المستخدم بعد تسجيل الدخول
-function showUserDashboard() {
-    document.getElementById('loginForm').style.display = 'none';
-    document.getElementById('userDashboard').style.display = 'block';
-    document.getElementById('usernameDisplay').textContent = localStorage.getItem('username');
-    document.getElementById('coinBalance').textContent = "0"; // أو قيمة من محفظتك
-    document.getElementById('walletAddress').textContent = generateWalletAddress();
-}
+// Event listener for the "Start Mining" button
+startMiningButton.addEventListener('click', function() {
+    startMining();
+});
 
-// إخفاء واجهة المستخدم بعد تسجيل الخروج
-function hideUserDashboard() {
-    document.getElementById('loginForm').style.display = 'block';
-    document.getElementById('userDashboard').style.display = 'none';
-}
-
-// إنشاء عنوان محفظة وهمي
-function generateWalletAddress() {
-    return '0x' + Math.random().toString(36).substr(2, 42);
-}
-
-// وظيفة بدء التعدين
+// Start Mining Function
 function startMining() {
-    let miningTimeLeft = 1440; // 1440 دقيقة (24 ساعة)
-    const miningInterval = setInterval(function() {
-        if (miningTimeLeft > 0) {
-            miningTimeLeft--;
-            document.getElementById('miningTimer').textContent = `Time left: ${miningTimeLeft} minutes`;
-        } else {
-            clearInterval(miningInterval);  // إيقاف العد التنازلي
-            alert('Mining completed! You earned 3 coins.');
-            // إضافة 3 عملات إلى رصيد المستخدم
-            let coinBalance = parseInt(document.getElementById('coinBalance').textContent);
-            document.getElementById('coinBalance').textContent = coinBalance + 3;
+    // Disable the button during mining
+    startMiningButton.disabled = true;
+
+    let remainingTime = miningDuration;
+    updateMiningTimer(remainingTime);
+
+    miningTimer = setInterval(function() {
+        remainingTime--;
+        updateMiningTimer(remainingTime);
+
+        if (remainingTime <= 0) {
+            clearInterval(miningTimer);
+            coinBalance += 3; // Add 3 coins after mining is complete
+            coinBalanceElement.textContent = coinBalance;
+            localStorage.setItem('coinBalance', coinBalance); // Save updated coin balance
+            startMiningButton.disabled = false; // Enable the button
+            alert("Mining completed! You earned 3 coins.");
         }
-    }, 60000); // كل دقيقة
+    }, 1000);
 }
 
-// تحقق إذا كان المستخدم قد سجل الدخول قبل التفاعل
-if (localStorage.getItem('loggedIn') === 'true') {
-    showUserDashboard();
+// Update Mining Timer Function
+function updateMiningTimer(timeInSeconds) {
+    const hours = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = timeInSeconds % 60;
+    miningTimeLeftElement.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
 }
 
-// إضافة أحداث الأزرار
-document.getElementById('loginButton').addEventListener('click', login);
-document.getElementById('logoutButton').addEventListener('click', logout);
-document.getElementById('startMiningButton').addEventListener('click', startMining);
+// Helper function to format time to two digits
+function formatTime(time) {
+    return time < 10 ? `0${time}` : time;
+}
