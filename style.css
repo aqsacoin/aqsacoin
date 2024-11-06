@@ -44,7 +44,7 @@ h1 {
 
 /* Dashboard Styles */
 .dashboard {
-    display: flex;
+    display: none; /* Hide initially */
     justify-content: space-around;
     margin-top: 30px;
     padding: 20px;
