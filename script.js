@@ -8,10 +8,14 @@ const miningTimeLeftElement = document.getElementById('miningTimeLeft');
 // Load user data from localStorage if available
 let coinBalance = parseInt(localStorage.getItem('coinBalance')) || 0; // Default to 0 if no data
 let miningTimer;
-let miningDuration = 5 * 60; // 5 minutes for mining (in seconds)
+let miningDuration = 24 * 60 * 60; // 24 hours for mining (in seconds) = 86400 seconds
+let remainingTime = parseInt(localStorage.getItem('remainingTime')) || miningDuration; // Get remaining time from localStorage
 
 // Display initial coin balance
 coinBalanceElement.textContent = coinBalance;
+
+// Display mining time if there was any previous mining session
+updateMiningTimer(remainingTime);
 
 // Check if the user is already logged in
 if (localStorage.getItem('isLoggedIn') === 'true') {
@@ -57,6 +61,11 @@ loginButton.addEventListener('click', function() {
 function showMiningSection() {
     document.querySelector('.user-actions').style.display = 'none';
     document.querySelector('.dashboard').style.display = 'flex';
+
+    // Start mining if there's remaining time
+    if (remainingTime > 0) {
+        startMining();
+    }
 }
 
 // Function to show the login/register section
@@ -75,12 +84,15 @@ function startMining() {
     // Disable the button during mining
     startMiningButton.disabled = true;
 
-    let remainingTime = miningDuration;
+    let remainingTime = parseInt(localStorage.getItem('remainingTime')) || miningDuration;
     updateMiningTimer(remainingTime);
 
     miningTimer = setInterval(function() {
         remainingTime--;
         updateMiningTimer(remainingTime);
+
+        // Save the remaining time to localStorage
+        localStorage.setItem('remainingTime', remainingTime);
 
         if (remainingTime <= 0) {
             clearInterval(miningTimer);
@@ -88,6 +100,7 @@ function startMining() {
             coinBalanceElement.textContent = coinBalance;
             localStorage.setItem('coinBalance', coinBalance); // Save updated coin balance
             startMiningButton.disabled = false; // Enable the button
+            localStorage.removeItem('remainingTime'); // Clear remaining time after mining is complete
             alert("Mining completed! You earned 3 coins.");
         }
     }, 1000);
