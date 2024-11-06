@@ -11,34 +11,45 @@
     <header>
         <nav>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#" id="homeButton">Home</a></li>
+                <li><a href="#" id="miningButton">Mining</a></li>
+                <li><a href="#" id="walletButton">Wallet</a></li>
+                <li><a href="#" id="settingsButton">Settings</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Main content -->
-    <section class="main-content">
+    <!-- Main content section -->
+    <section id="mainContent" class="main-content">
         <h1>Welcome to AqsaCoin</h1>
-        <p>Your cryptocurrency mining site</p>
+        <p>Your cryptocurrency mining platform</p>
 
-        <div class="buttons">
+        <!-- Register/Login Section -->
+        <div id="authSection">
             <button id="registerButton">Register</button>
             <button id="loginButton">Login</button>
         </div>
 
         <!-- Wallet Generation Section -->
-        <div id="walletSection">
+        <div id="walletSection" style="display: none;">
             <button id="generateWalletButton">Generate Wallet</button>
             <button id="restoreWalletButton">Restore Wallet</button>
         </div>
 
+        <!-- Wallet Info Section -->
         <div id="walletInfo" style="display: none;">
             <h3>Your Wallet Address:</h3>
             <p id="walletAddress"></p>
             <h3>12 Recovery Words:</h3>
             <p id="recoveryWords"></p>
+        </div>
+
+        <!-- Mining Timer Section -->
+        <div id="miningSection" style="display: none;">
+            <h2>Mining Timer</h2>
+            <p id="miningTimer">00:00:00</p>
+            <button id="startMiningButton">Start Mining</button>
+            <p id="minedCoins">Coins Mined: 0</p>
         </div>
     </section>
 
