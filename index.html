@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,23 +7,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>مرحبًا بكم في AqsaCoin</h1>
-        <button onclick="showRegister()">التسجيل</button>
-        <button onclick="showLogin()">تسجيل الدخول</button>
-        <div id="registerForm" style="display: none;">
-            <h2>التسجيل</h2>
-            <input type="text" id="registerUsername" placeholder="اسم المستخدم">
-            <input type="password" id="registerPassword" placeholder="كلمة المرور">
-            <button onclick="register()">إكمال التسجيل</button>
+    <!-- Navbar -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main content -->
+    <section class="main-content">
+        <h1>Welcome to AqsaCoin</h1>
+        <p>Your cryptocurrency mining site</p>
+
+        <div class="buttons">
+            <button id="registerButton">Register</button>
+            <button id="loginButton">Login</button>
         </div>
-        <div id="loginForm" style="display: none;">
-            <h2>تسجيل الدخول</h2>
-            <input type="text" id="loginUsername" placeholder="اسم المستخدم">
-            <input type="password" id="loginPassword" placeholder="كلمة المرور">
-            <button onclick="login()">تسجيل الدخول</button>
-        </div>
-    </div>
+    </section>
+
     <script src="script.js"></script>
 </body>
 </html>
