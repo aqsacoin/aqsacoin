@@ -1,9 +1,9 @@
-// Function to show a simple alert when the register button is clicked
+// Function to redirect to the registration page
 document.getElementById('registerButton').addEventListener('click', function() {
-    alert('Register button clicked!');
+    window.location.href = "register.html"; // تأكد من أن هذه الصفحة موجودة
 });
 
-// Function to show a simple alert when the login button is clicked
+// Function to redirect to the login page
 document.getElementById('loginButton').addEventListener('click', function() {
-    alert('Login button clicked!');
+    window.location.href = "login.html"; // تأكد من أن هذه الصفحة موجودة
 });
