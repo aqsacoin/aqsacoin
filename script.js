@@ -1,43 +1,36 @@
-// Wallet Functions
-document.getElementById('createWalletButton').addEventListener('click', function() {
-    let wallet = createWallet();
-    document.getElementById('walletDetails').innerText = `Wallet Created: ${wallet.address}`;
-});
+// محاكاة البيانات للمحفظة
+let walletAddress = "0x1234567890abcdef1234567890abcdef";
+let coinBalance = 0;
 
-document.getElementById('recoverWalletButton').addEventListener('click', function() {
-    let recoveryPhrase = prompt("Enter your recovery phrase:");
-    if (recoveryPhrase) {
-        let wallet = recoverWallet(recoveryPhrase);
-        document.getElementById('walletDetails').innerText = `Wallet Recovered: ${wallet.address}`;
-    }
-});
+// تحديث واجهة المحفظة
+document.getElementById("walletAddress").innerText = walletAddress;
+document.getElementById("coinBalance").innerText = coinBalance;
 
-// Mining Functions
-document.getElementById('startMiningButton').addEventListener('click', function() {
+// التوقيت للمعدن
+let miningTimer = 0;
+let miningInterval;
+
+function startMining() {
+    miningInterval = setInterval(function() {
+        miningTimer++;
+        let hours = Math.floor(miningTimer / 3600);
+        let minutes = Math.floor((miningTimer % 3600) / 60);
+        let seconds = miningTimer % 60;
+
+        document.getElementById("miningTimer").innerText =
+            `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    }, 1000);
+}
+
+document.getElementById("mineButton").addEventListener("click", function() {
     startMining();
 });
 
-function startMining() {
-    let miningStatus = document.getElementById('miningStatus');
-    miningStatus.innerText = "Mining in progress...";
+// أزرار التسجيل والدخول
+document.getElementById("registerButton").addEventListener("click", function() {
+    alert("Register button clicked");
+});
 
-    // Simulate mining logic (you would replace this with real mining logic)
-    setTimeout(() => {
-        miningStatus.innerText = "Mining complete! You earned 3 AqsaCoins.";
-    }, 3000);
-}
-
-// Create Wallet Function (dummy example)
-function createWallet() {
-    return {
-        address: "0x" + Math.random().toString(36).substr(2, 40), // Random address for demonstration
-        recoveryPhrase: "12 random words for recovery"
-    };
-}
-
-// Recover Wallet Function (dummy example)
-function recoverWallet(recoveryPhrase) {
-    return {
-        address: "0x" + Math.random().toString(36).substr(2, 40) // Random address for demonstration
-    };
-}
+document.getElementById("loginButton").addEventListener("click", function() {
+    alert("Login button clicked");
+});
