@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Navbar -->
     <header>
         <nav>
             <ul>
@@ -17,6 +18,7 @@
         </nav>
     </header>
 
+    <!-- Main content -->
     <section class="main-content">
         <h1>Welcome to AqsaCoin</h1>
         <p>Your cryptocurrency mining site</p>
@@ -24,13 +26,19 @@
         <div class="buttons">
             <button id="registerButton">Register</button>
             <button id="loginButton">Login</button>
-            <button id="mineButton">Start Mining</button>
         </div>
 
-        <div class="wallet-info">
-            <p>Wallet Address: <span id="walletAddress"></span></p>
-            <p>Coins: <span id="coinBalance">0</span></p>
-            <p>Mining Timer: <span id="miningTimer">00:00:00</span></p>
+        <!-- Wallet Generation Section -->
+        <div id="walletSection">
+            <button id="generateWalletButton">Generate Wallet</button>
+            <button id="restoreWalletButton">Restore Wallet</button>
+        </div>
+
+        <div id="walletInfo" style="display: none;">
+            <h3>Your Wallet Address:</h3>
+            <p id="walletAddress"></p>
+            <h3>12 Recovery Words:</h3>
+            <p id="recoveryWords"></p>
         </div>
     </section>
 
