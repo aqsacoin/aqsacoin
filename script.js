@@ -1,65 +1,120 @@
-// Simulate a simple wallet system and mining process
+// Get elements
+const registerButton = document.getElementById('registerButton');
+const loginButton = document.getElementById('loginButton');
+const startMiningButton = document.getElementById('startMiningButton');
+const coinBalanceElement = document.getElementById('coinBalance');
+const miningTimeLeftElement = document.getElementById('miningTimeLeft');
 
-// Simulate a wallet object
-let wallet = {
-    address: generateWalletAddress(),
-    balance: 0,
-    mining: false,
-    miningInterval: null,
-};
+// Load user data from localStorage if available
+let coinBalance = parseInt(localStorage.getItem('coinBalance')) || 0; // Default to 0 if no data
+let miningTimer;
+let miningDuration = 24 * 60 * 60; // 24 hours for mining (in seconds) = 86400 seconds
+let remainingTime = parseInt(localStorage.getItem('remainingTime')) || miningDuration; // Get remaining time from localStorage
 
-// Register and Login Buttons
-document.getElementById("registerButton").addEventListener("click", function() {
-    alert("Registration feature is not implemented yet.");
-});
+// Display initial coin balance
+coinBalanceElement.textContent = coinBalance;
 
-document.getElementById("loginButton").addEventListener("click", function() {
-    alert("Login feature is not implemented yet.");
-});
+// Display mining time if there was any previous mining session
+updateMiningTimer(remainingTime);
 
-// Display wallet info
-function displayWallet() {
-    document.getElementById("wallet").style.display = "block";
-    document.getElementById("walletAddress").innerText = wallet.address;
-    document.getElementById("walletBalance").innerText = wallet.balance;
+// Check if the user is already logged in
+if (localStorage.getItem('isLoggedIn') === 'true') {
+    // User is logged in, show mining section
+    showMiningSection();
+} else {
+    // User is not logged in, show login/register buttons
+    showLoginRegisterSection();
 }
 
-// Simulate mining function
-function startMining() {
-    if (wallet.mining) {
-        alert("Mining is already in progress.");
-        return;
-    }
+// Event listener for the "Register" button
+registerButton.addEventListener('click', function() {
+    const username = prompt("Enter your username for registration:");
+    const password = prompt("Enter your password for registration:");
 
-    wallet.mining = true;
-    document.getElementById("mineButton").innerText = "Stop Mining";
-
-    wallet.miningInterval = setInterval(function() {
-        wallet.balance += 3; // Mining 3 coins every interval
-        document.getElementById("walletBalance").innerText = wallet.balance;
-    }, 1000); // Every 1 second simulates mining for testing
-}
-
-// Stop Mining
-function stopMining() {
-    wallet.mining = false;
-    clearInterval(wallet.miningInterval);
-    document.getElementById("mineButton").innerText = "Start Mining";
-}
-
-// Mining button functionality
-document.getElementById("mineButton").addEventListener("click", function() {
-    if (wallet.mining) {
-        stopMining();
+    if (username && password) {
+        localStorage.setItem('username', username);
+        localStorage.setItem('password', password);
+        alert("Registration successful!");
+        showLoginRegisterSection(); // Switch to login screen after registration
     } else {
+        alert("Both fields are required.");
+    }
+});
+
+// Event listener for the "Login" button
+loginButton.addEventListener('click', function() {
+    const storedUsername = localStorage.getItem('username');
+    const storedPassword = localStorage.getItem('password');
+    const username = prompt("Enter your username to login:");
+    const password = prompt("Enter your password to login:");
+
+    if (username === storedUsername && password === storedPassword) {
+        localStorage.setItem('isLoggedIn', 'true');
+        alert("Login successful!");
+        showMiningSection(); // Show mining section after login
+    } else {
+        alert("Incorrect username or password.");
+    }
+});
+
+// Function to show the mining section
+function showMiningSection() {
+    document.querySelector('.user-actions').style.display = 'none';
+    document.querySelector('.dashboard').style.display = 'flex';
+
+    // Start mining if there's remaining time
+    if (remainingTime > 0) {
         startMining();
     }
-});
-
-// Utility to generate a random wallet address (For demonstration only)
-function generateWalletAddress() {
-    return '0x' + Math.random().toString(36).substr(2, 16); // Random address generator
 }
 
-// Call display wallet function to show wallet details on load
-displayWallet();
+// Function to show the login/register section
+function showLoginRegisterSection() {
+    document.querySelector('.user-actions').style.display = 'block';
+    document.querySelector('.dashboard').style.display = 'none';
+}
+
+// Event listener for the "Start Mining" button
+startMiningButton.addEventListener('click', function() {
+    startMining();
+});
+
+// Start Mining Function
+function startMining() {
+    // Disable the button during mining
+    startMiningButton.disabled = true;
+
+    let remainingTime = parseInt(localStorage.getItem('remainingTime')) || miningDuration;
+    updateMiningTimer(remainingTime);
+
+    miningTimer = setInterval(function() {
+        remainingTime--;
+        updateMiningTimer(remainingTime);
+
+        // Save the remaining time to localStorage
+        localStorage.setItem('remainingTime', remainingTime);
+
+        if (remainingTime <= 0) {
+            clearInterval(miningTimer);
+            coinBalance += 3; // Add 3 coins after mining is complete
+            coinBalanceElement.textContent = coinBalance;
+            localStorage.setItem('coinBalance', coinBalance); // Save updated coin balance
+            startMiningButton.disabled = false; // Enable the button
+            localStorage.removeItem('remainingTime'); // Clear remaining time after mining is complete
+            alert("Mining completed! You earned 3 coins.");
+        }
+    }, 1000);
+}
+
+// Update Mining Timer Function
+function updateMiningTimer(timeInSeconds) {
+    const hours = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = timeInSeconds % 60;
+    miningTimeLeftElement.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+}
+
+// Helper function to format time to two digits
+function formatTime(time) {
+    return time < 10 ? `0${time}` : time;
+}
