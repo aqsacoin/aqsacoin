@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مسلم كوين</title>
+    <title>MuslimCoin</title>
     <style>
-        /* تنسيق الصفحة الأساسية */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -15,20 +14,17 @@
             text-align: center;
         }
 
-        /* تنسيق العنوان */
         h1 {
             color: #4CAF50;
             font-size: 36px;
         }
 
-        /* تنسيق الفقرات */
         p {
             font-size: 18px;
             color: #555;
             margin: 20px 0;
         }
 
-        /* تنسيق الأزرار */
         button {
             background-color: #4CAF50;
             color: white;
@@ -41,12 +37,10 @@
             transition: background-color 0.3s;
         }
 
-        /* تأثير عند مرور الماوس على الزر */
         button:hover {
             background-color: #45a049;
         }
 
-        /* تنسيق الفاصل الزمني بين المحتويات */
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -56,38 +50,74 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* تنسيق النصوص داخل الحاوية */
         .content {
             text-align: right;
         }
+
+        /* تحسين الشكل في حال كانت اللغة العربية */
+        .arabic .content {
+            text-align: left;
+        }
+
+        /* لعرض الأزرار في أعلى الصفحة */
+        .language-select {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+        }
+
     </style>
 </head>
 
 <body>
-
-    <!-- حاوية المحتوى -->
-    <div class="container">
-        <!-- العنوان الرئيسي -->
-        <h1>مرحبا بك في MuslimCoin</h1>
-
-        <!-- النص المفسر -->
-        <div class="content">
-            <p>ابدأ عملية التعدين الآن من خلال النقر على الزر أدناه:</p>
-        </div>
-
-        <!-- زر لبدء التعدين -->
-        <button id="start-mining-button">ابدأ التعدين</button>
+    <!-- حاوية اختيار اللغة -->
+    <div class="language-select">
+        <button onclick="changeLanguage('en')">English</button>
+        <button onclick="changeLanguage('ar')">العربية</button>
     </div>
 
-    <!-- إضافة الكود JavaScript للتفاعل -->
+    <!-- حاوية المحتوى -->
+    <div class="container" id="content-container">
+        <h1 id="title">Welcome to MuslimCoin</h1>
+        <div class="content">
+            <p id="description">Start mining now by clicking the button below:</p>
+        </div>
+        <button id="start-mining-button">Start Mining</button>
+    </div>
+
     <script>
+        // تحميل اللغة من localStorage أو تعيين اللغة الافتراضية الإنجليزية
+        let currentLanguage = localStorage.getItem('language') || 'en';
+        document.documentElement.lang = currentLanguage;
+        changeContent(currentLanguage);
+
+        // تغيير اللغة
+        function changeLanguage(language) {
+            localStorage.setItem('language', language);
+            document.documentElement.lang = language;
+            changeContent(language);
+        }
+
+        // تغيير محتويات الصفحة بناءً على اللغة المختارة
+        function changeContent(language) {
+            if (language === 'en') {
+                document.getElementById('title').textContent = 'Welcome to MuslimCoin';
+                document.getElementById('description').textContent = 'Start mining now by clicking the button below:';
+                document.getElementById('start-mining-button').textContent = 'Start Mining';
+                document.getElementById('content-container').classList.remove('arabic');
+            } else if (language === 'ar') {
+                document.getElementById('title').textContent = 'مرحباً بك في مسلم كوين';
+                document.getElementById('description').textContent = 'ابدأ التعدين الآن من خلال النقر على الزر أدناه:';
+                document.getElementById('start-mining-button').textContent = 'ابدأ التعدين';
+                document.getElementById('content-container').classList.add('arabic');
+            }
+        }
+
         // إضافة حدث عند النقر على الزر "ابدأ التعدين"
         document.getElementById('start-mining-button').addEventListener('click', function () {
-            alert('بدأت عملية التعدين!');
-            // هنا يمكن إضافة إجراءات أخرى مثل إرسال طلبات للخادم أو التفاعل مع البلوكشين
+            alert(currentLanguage === 'en' ? 'Mining has started!' : 'بدأت عملية التعدين!');
         });
     </script>
-
 </body>
 
 </html>
