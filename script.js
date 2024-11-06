@@ -5,13 +5,13 @@ let miningTime = 86400; // 24 hours in seconds
 
 // Event Listeners for Buttons
 document.getElementById('registerButton').addEventListener('click', function() {
-    alert('You clicked Register button!');
-    // Implement registration functionality here
+    alert('Registration is not implemented yet!');
+    // Implement actual registration functionality here
 });
 
 document.getElementById('loginButton').addEventListener('click', function() {
-    alert('You clicked Login button!');
-    // Implement login functionality here
+    alert('Login is not implemented yet!');
+    // Implement actual login functionality here
 });
 
 document.getElementById('generateWalletButton').addEventListener('click', function() {
@@ -26,10 +26,15 @@ document.getElementById('startMiningButton').addEventListener('click', function(
     startMining();
 });
 
+document.getElementById('copyRecoveryWordsButton').addEventListener('click', function() {
+    copyRecoveryWords();
+});
+
 // Function to generate wallet with 12 recovery words
 function generateWallet() {
     let recoveryWords = generateRecoveryWords();
-    alert('Your wallet has been created with the following recovery words:\n' + recoveryWords);
+    document.getElementById('recoveryWords').value = recoveryWords; // Display the recovery words
+    document.getElementById('recoveryWordsSection').style.display = 'block'; // Show the recovery words section
     document.getElementById('walletAddress').innerText = 'Your address: ' + generateRandomAddress();
     document.getElementById('walletBalance').innerText = 'Balance: 0 Coins';
 }
@@ -97,4 +102,12 @@ function generateRecoveryWords() {
 // Utility function to generate a random wallet address
 function generateRandomAddress() {
     return '0x' + Math.random().toString(36).substring(2, 15);
+}
+
+// Function to copy recovery words to clipboard
+function copyRecoveryWords() {
+    let recoveryWordsText = document.getElementById('recoveryWords');
+    recoveryWordsText.select();
+    document.execCommand('copy');
+    alert('Recovery words copied to clipboard!');
 }
