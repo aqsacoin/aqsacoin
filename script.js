@@ -1,120 +1,77 @@
-// Get elements
-const registerButton = document.getElementById('registerButton');
-const loginButton = document.getElementById('loginButton');
-const registerFormDiv = document.getElementById('registerFormDiv');
-const loginFormDiv = document.getElementById('loginFormDiv');
-const userDetailsDiv = document.getElementById('userDetails');
-const loginRegisterDiv = document.getElementById('loginRegister');
-const registerForm = document.getElementById('registerForm');
-const loginForm = document.getElementById('loginForm');
-const startMiningButton = document.getElementById('startMiningButton');
-const logoutButton = document.getElementById('logoutButton');
-const coinBalance = document.getElementById('coinBalance');
-const miningTime = document.getElementById('miningTime');
-const usernameDisplay = document.getElementById('username');
-const walletAddress = document.getElementById('walletAddress');
+// Script.js
 
-// Show the registration form
-registerButton.addEventListener('click', () => {
-    registerFormDiv.style.display = 'block';
-    loginFormDiv.style.display = 'none';
+// تأكد من تسجيل الدخول عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', function () {
+    if (localStorage.getItem('loggedIn') === 'true') {
+        showUserDashboard();
+    }
 });
 
-// Show the login form
-loginButton.addEventListener('click', () => {
-    loginFormDiv.style.display = 'block';
-    registerFormDiv.style.display = 'none';
-});
-
-// Handle register form submission
-registerForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
+// تسجيل الدخول
+function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
     if (username && password) {
+        // تخزين بيانات تسجيل الدخول في localStorage
         localStorage.setItem('username', username);
-        localStorage.setItem('password', password);
-        localStorage.setItem('coins', 0); // Set initial coins to 0
-        localStorage.setItem('miningTimeLeft', 1440); // 24 hours in minutes
-        alert("Registration successful! You can now log in.");
-    }
-});
-
-// Handle login form submission
-loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const loginUsername = document.getElementById('loginUsername').value;
-    const loginPassword = document.getElementById('loginPassword').value;
-
-    const savedUsername = localStorage.getItem('username');
-    const savedPassword = localStorage.getItem('password');
-
-    if (loginUsername === savedUsername && loginPassword === savedPassword) {
-        localStorage.setItem('loggedIn', true);
-        window.location.reload();
+        localStorage.setItem('loggedIn', 'true');
+        showUserDashboard();
     } else {
-        alert("Invalid credentials.");
+        alert('Please fill in all fields');
     }
-});
+}
 
-// Handle logout
-logoutButton.addEventListener('click', () => {
+// تسجيل الخروج
+function logout() {
+    localStorage.removeItem('username');
     localStorage.removeItem('loggedIn');
-    window.location.reload();
-});
-
-// Show user details if logged in
-function checkLoginStatus() {
-    const isLoggedIn = localStorage.getItem('loggedIn');
-    if (isLoggedIn) {
-        const username = localStorage.getItem('username');
-        const coins = localStorage.getItem('coins');
-        const miningTimeLeft = localStorage.getItem('miningTimeLeft');
-
-        usernameDisplay.textContent = username;
-        coinBalance.textContent = coins;
-        walletAddress.textContent = `0x${Math.random().toString(36).substr(2, 42)}`; // Fake wallet address
-        miningTime.textContent = formatTime(miningTimeLeft);
-
-        userDetailsDiv.style.display = 'block';
-        loginRegisterDiv.style.display = 'none';
-    } else {
-        userDetailsDiv.style.display = 'none';
-        loginRegisterDiv.style.display = 'block';
-    }
+    hideUserDashboard();
 }
 
-// Format time in minutes to HH:MM
-function formatTime(minutes) {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+// إظهار واجهة المستخدم بعد تسجيل الدخول
+function showUserDashboard() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('userDashboard').style.display = 'block';
+    document.getElementById('usernameDisplay').textContent = localStorage.getItem('username');
+    document.getElementById('coinBalance').textContent = "0"; // أو قيمة من محفظتك
+    document.getElementById('walletAddress').textContent = generateWalletAddress();
 }
 
-// Start mining functionality
-startMiningButton.addEventListener('click', () => {
-    let miningTimeLeft = parseInt(localStorage.getItem('miningTimeLeft'));
+// إخفاء واجهة المستخدم بعد تسجيل الخروج
+function hideUserDashboard() {
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('userDashboard').style.display = 'none';
+}
 
-    if (miningTimeLeft > 0) {
-        const miningInterval = setInterval(() => {
+// إنشاء عنوان محفظة وهمي
+function generateWalletAddress() {
+    return '0x' + Math.random().toString(36).substr(2, 42);
+}
+
+// وظيفة بدء التعدين
+function startMining() {
+    let miningTimeLeft = 1440; // 1440 دقيقة (24 ساعة)
+    const miningInterval = setInterval(function() {
+        if (miningTimeLeft > 0) {
             miningTimeLeft--;
-            localStorage.setItem('miningTimeLeft', miningTimeLeft);
-            miningTime.textContent = formatTime(miningTimeLeft);
+            document.getElementById('miningTimer').textContent = `Time left: ${miningTimeLeft} minutes`;
+        } else {
+            clearInterval(miningInterval);
+            alert('Mining completed! You earned 3 coins.');
+            // إضافة 3 عملات إلى رصيد المستخدم
+            let coinBalance = parseInt(document.getElementById('coinBalance').textContent);
+            document.getElementById('coinBalance').textContent = coinBalance + 3;
+        }
+    }, 60000); // كل دقيقة
+}
 
-            if (miningTimeLeft <= 0) {
-                clearInterval(miningInterval);
-                let coins = parseInt(localStorage.getItem('coins'));
-                coins += 3; // Add 3 coins for mining
-                localStorage.setItem('coins', coins);
-                coinBalance.textContent = coins;
-                alert("Mining complete! You earned 3 coins.");
-            }
-        }, 60000); // Update every minute
-    }
-});
+// تحقق إذا كان المستخدم قد سجل الدخول قبل التفاعل
+if (localStorage.getItem('loggedIn') === 'true') {
+    showUserDashboard();
+}
 
-// Run on page load
-window.onload = checkLoginStatus;
+// إضافة أحداث الأزرار
+document.getElementById('loginButton').addEventListener('click', login);
+document.getElementById('logoutButton').addEventListener('click', logout);
+document.getElementById('startMiningButton').addEventListener('click', startMining);
