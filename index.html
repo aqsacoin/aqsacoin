@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AqsaCoin</title>
+    <title>AqsaCoin - Cryptocurrency Mining</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,25 +18,35 @@
         </nav>
     </header>
 
-    <!-- Main content -->
+    <!-- Main content section -->
     <section class="main-content">
         <h1>Welcome to AqsaCoin</h1>
-        <p>Your cryptocurrency mining site</p>
+        <p>Your cryptocurrency mining site. Start mining and earn coins!</p>
+        
+        <!-- Wallet and Mining Status -->
+        <div class="dashboard">
+            <div class="wallet-info">
+                <h2>Your Wallet</h2>
+                <p>Coins: <span id="coinBalance">0</span></p>
+            </div>
+            <div class="mining-info">
+                <h2>Mining Status</h2>
+                <p>Mining Time Left: <span id="miningTimeLeft">00:00:00</span></p>
+                <button id="startMiningButton">Start Mining</button>
+            </div>
+        </div>
 
-        <!-- Register / Login Buttons -->
-        <div class="buttons">
+        <!-- User Registration/Login -->
+        <div class="user-actions">
             <button id="registerButton">Register</button>
             <button id="loginButton">Login</button>
         </div>
-
-        <!-- Wallet Section -->
-        <div id="wallet" style="display:none;">
-            <h2>Your Wallet</h2>
-            <p>Wallet Address: <span id="walletAddress">loading...</span></p>
-            <p>Balance: <span id="walletBalance">0</span> AqsaCoins</p>
-            <button id="mineButton">Start Mining</button>
-        </div>
     </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 AqsaCoin. All Rights Reserved.</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
