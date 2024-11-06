@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AqsaCoin - Cryptocurrency Mining</title>
+    <title>AqsaCoin - Wallet</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,36 +18,26 @@
         </nav>
     </header>
 
-    <!-- Main content section -->
+    <!-- Main content -->
     <section class="main-content">
-        <h1>Welcome to AqsaCoin</h1>
-        <p>Your cryptocurrency mining site. Start mining and earn coins!</p>
-        
-        <!-- Wallet and Mining Status -->
-        <div class="dashboard">
-            <div class="wallet-info">
-                <h2>Your Wallet</h2>
-                <p>Coins: <span id="coinBalance">0</span></p>
-            </div>
-            <div class="mining-info">
-                <h2>Mining Status</h2>
-                <p>Mining Time Left: <span id="miningTimeLeft">00:00:00</span></p>
-                <button id="startMiningButton">Start Mining</button>
-            </div>
+        <h1>Your AqsaCoin Wallet</h1>
+
+        <!-- Buttons for generating or restoring the wallet -->
+        <div class="buttons">
+            <button id="generateBtn">Generate Wallet</button>
+            <button id="restoreBtn">Restore Wallet</button>
         </div>
 
-        <!-- User Registration/Login -->
-        <div class="user-actions">
-            <button id="registerButton">Register</button>
-            <button id="loginButton">Login</button>
+        <!-- Wallet Information -->
+        <div id="walletInfo" style="display:none;">
+            <h2>Wallet Details:</h2>
+            <p><strong>Your 12-word recovery phrase:</strong> <span id="recoveryPhrase"></span></p>
+            <p><strong>Your Wallet Address:</strong> <span id="address"></span></p>
+            <p><strong>Your Private Key:</strong> <span id="privateKey"></span></p>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2024 AqsaCoin. All Rights Reserved.</p>
-    </footer>
-
-    <script src="script.js"></script>
+    <!-- Include the script for wallet generation and restoration -->
+    <script src="wallet.js"></script>
 </body>
 </html>
