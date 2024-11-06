@@ -57,7 +57,7 @@ function startMining() {
             miningTimeLeft--;
             document.getElementById('miningTimer').textContent = `Time left: ${miningTimeLeft} minutes`;
         } else {
-            clearInterval(miningInterval);
+            clearInterval(miningInterval);  // إيقاف العد التنازلي
             alert('Mining completed! You earned 3 coins.');
             // إضافة 3 عملات إلى رصيد المستخدم
             let coinBalance = parseInt(document.getElementById('coinBalance').textContent);
