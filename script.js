@@ -1,15 +1,9 @@
-// تمهيد: هذا الكود يتحكم في وظائف الأزرار مثل التسجيل وتسجيل الدخول
-
-// الدالة التي يتم استدعاؤها عند النقر على زر التسجيل
-document.getElementById('registerBtn').addEventListener('click', function () {
-    alert('ستتم إعادة توجيهك إلى صفحة التسجيل');
-    // هنا يمكنك إضافة الكود لتحويل المستخدم إلى صفحة التسجيل أو فتح نموذج التسجيل
+// Function to show a simple alert when the register button is clicked
+document.getElementById('registerButton').addEventListener('click', function() {
+    alert('Register button clicked!');
 });
 
-// الدالة التي يتم استدعاؤها عند النقر على زر تسجيل الدخول
-document.getElementById('loginBtn').addEventListener('click', function () {
-    alert('ستتم إعادة توجيهك إلى صفحة تسجيل الدخول');
-    // هنا يمكنك إضافة الكود لتحويل المستخدم إلى صفحة تسجيل الدخول أو فتح نموذج تسجيل الدخول
+// Function to show a simple alert when the login button is clicked
+document.getElementById('loginButton').addEventListener('click', function() {
+    alert('Login button clicked!');
 });
-
-// إضافة وظائف أخرى مثل تسجيل الدخول عبر فيس بوك أو جوجل حسب حاجتك
