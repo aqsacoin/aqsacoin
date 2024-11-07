@@ -3,50 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AqsaCoin - Cryptocurrency Mining</title>
+    <title>AqsaCoin Wallet</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navbar -->
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Main content section -->
-    <section class="main-content">
+    <div class="container">
         <h1>Welcome to AqsaCoin</h1>
-        <p>Your cryptocurrency mining site. Start mining and earn coins!</p>
-        
-        <!-- Wallet and Mining Status -->
-        <div class="dashboard">
-            <div class="wallet-info">
-                <h2>Your Wallet</h2>
-                <p>Coins: <span id="coinBalance">0</span></p>
-            </div>
-            <div class="mining-info">
-                <h2>Mining Status</h2>
-                <p>Mining Time Left: <span id="miningTimeLeft">00:00:00</span></p>
-                <button id="startMiningButton">Start Mining</button>
-            </div>
-        </div>
-
-        <!-- User Registration/Login -->
-        <div class="user-actions">
+        <div class="auth-section">
             <button id="registerButton">Register</button>
             <button id="loginButton">Login</button>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2024 AqsaCoin. All Rights Reserved.</p>
-    </footer>
+        <div class="wallet-section" style="display: none;">
+            <p id="balance">Balance: 0 AqsaCoins</p>
+            <button id="walletButton">Show Wallet Address</button>
+            <button id="mineButton">Start Mining</button>
+            <p id="walletAddress" style="display: none;">Wallet Address: <span id="walletAddressDisplay"></span></p>
+            <button id="recoveryToggleButton">Show Recovery Words</button>
+            <p id="recoveryWords" style="display: none;">Recovery Words: <span id="recoveryWordsDisplay"></span></p>
+            <p id="miningTimer"></p>
+            <button id="logoutButton">Logout</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
