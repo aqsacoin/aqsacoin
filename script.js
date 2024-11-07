@@ -152,7 +152,3 @@ document.getElementById("logoutButton").onclick = function() {
 document.addEventListener("DOMContentLoaded", function() {
     if (sessionStorage.getItem("loggedIn") === "true") {
         showWallet();
-    } else {
-        document.querySelector(".wallet-section").style.display = "none";
-    }
-    updateBalance
