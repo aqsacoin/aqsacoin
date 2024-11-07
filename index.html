@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محفظة AqsaCoin</title>
+    <title>AqsaCoin Wallet</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="container">
-        <h1>مرحبا بكم في محفظة AqsaCoin</h1>
+        <h1>Welcome to AqsaCoin</h1>
         <div class="auth-section">
-            <button id="registerButton">تسجيل</button>
-            <button id="loginButton">تسجيل الدخول</button>
+            <button id="registerButton">Register</button>
+            <button id="loginButton">Login</button>
         </div>
 
         <div class="wallet-section" style="display: none;">
-            <p>العنوان: <span id="walletAddressDisplay"></span></p>
-            <button id="copyWalletButton">نسخ عنوان المحفظة</button>
-            <p id="balance">الرصيد: 0 AqsaCoins</p>
-            <p id="miningTimer">يمكنك البدء في التعدين الآن!</p>
-            <button id="mineButton">ابدأ التعدين</button>
-            <button id="transferButton">نقل العملات</button>
-            <button id="logoutButton">تسجيل الخروج</button>
+            <p id="balance">Balance: 0 AqsaCoins</p>
+            <button id="walletButton">Show Wallet Address</button>
+            <button id="mineButton">Start Mining</button>
+            <p id="walletAddress" style="display: none;">Wallet Address: <span id="walletAddressDisplay"></span></p>
+            <button id="sendCoinsButton">Send Coins</button>
+            <p id="recoveryWords" style="display: none;">Recovery Words: <span id="recoveryWordsDisplay"></span></p>
+            <p id="miningTimer"></p>
+            <button id="logoutButton">Logout</button>
         </div>
     </div>
 
