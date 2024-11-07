@@ -115,15 +115,30 @@ function formatTime(ms) {
     return `${hours}h ${minutes}m ${seconds}s`;
 }
 
-// زر نسخ عنوان المحفظة
-document.getElementById("copyWalletButton").onclick = function() {
-    const walletAddress = document.getElementById("walletAddressDisplay").textContent;
-    navigator.clipboard.writeText(walletAddress).then(() => {
-        alert("تم نسخ عنوان المحفظة إلى الحافظة!");
-    }).catch((error) => {
-        console.error("فشل نسخ عنوان المحفظة:", error);
-        alert("فشل في نسخ عنوان المحفظة.");
-    });
+// إظهار/إخفاء عنوان المحفظة
+document.getElementById("walletButton").onclick = function() {
+    const walletAddress = document.getElementById("walletAddress");
+    walletAddress.style.display = walletAddress.style.display === "none" ? "block" : "none";
+};
+
+// زر إرسال العملات
+document.getElementById("sendCoinsButton").onclick = function() {
+    const recipientAddress = prompt("Enter the recipient's wallet address (must start with AQSA-):");
+    const amount = parseInt(prompt("Enter the amount to send:"));
+
+    if (recipientAddress && amount > 0) {
+        const currentBalance = parseInt(localStorage.getItem("balance") || 0);
+        if (currentBalance >= amount) {
+            const newBalance = currentBalance - amount;
+            localStorage.setItem("balance", newBalance.toString());
+            alert(`Sent ${amount} AqsaCoins to ${recipientAddress}`);
+            updateBalance();
+        } else {
+            alert("Insufficient balance.");
+        }
+    } else {
+        alert("Invalid input.");
+    }
 };
 
 // زر تسجيل الخروج
@@ -140,5 +155,4 @@ document.addEventListener("DOMContentLoaded", function() {
     } else {
         document.querySelector(".wallet-section").style.display = "none";
     }
-    updateBalance();
-});
+    updateBalance
