@@ -65,7 +65,7 @@ document.getElementById("loginButton").onclick = function() {
 function showWallet() {
     document.querySelector(".auth-section").style.display = "none";
     document.querySelector(".wallet-section").style.display = "block";
-    document.getElementById("walletAddressDisplay").textContent = localStorage.getItem("walletAddress");
+    document.getElementById("walletAddress").textContent = localStorage.getItem("walletAddress");
     updateBalance();
     updateMiningTimer();
 }
@@ -115,29 +115,23 @@ function formatTime(ms) {
     return `${hours}h ${minutes}m ${seconds}s`;
 }
 
-// إظهار/إخفاء عنوان المحفظة
-document.getElementById("walletButton").onclick = function() {
-    const walletAddress = document.getElementById("walletAddress");
-    walletAddress.style.display = walletAddress.style.display === "none" ? "block" : "none";
-};
-
-// زر إرسال العملات
+// إرسال العملات
 document.getElementById("sendCoinsButton").onclick = function() {
-    const recipientAddress = prompt("Enter the recipient's wallet address (must start with AQSA-):");
-    const amount = parseInt(prompt("Enter the amount to send:"));
+    const recipientAddress = prompt("Enter the recipient's wallet address:");
+    const amount = parseInt(prompt("Enter the amount of AqsaCoins to send:"), 10);
 
-    if (recipientAddress && amount > 0) {
-        const currentBalance = parseInt(localStorage.getItem("balance") || 0);
-        if (currentBalance >= amount) {
-            const newBalance = currentBalance - amount;
-            localStorage.setItem("balance", newBalance.toString());
-            alert(`Sent ${amount} AqsaCoins to ${recipientAddress}`);
+    if (recipientAddress && !isNaN(amount) && amount > 0) {
+        let balance = parseInt(localStorage.getItem("balance") || "0", 10);
+        if (balance >= amount) {
+            balance -= amount;
+            localStorage.setItem("balance", balance.toString());
+            alert("Coins sent successfully!");
             updateBalance();
         } else {
             alert("Insufficient balance.");
         }
     } else {
-        alert("Invalid input.");
+        alert("Invalid input. Please try again.");
     }
 };
 
@@ -152,3 +146,8 @@ document.getElementById("logoutButton").onclick = function() {
 document.addEventListener("DOMContentLoaded", function() {
     if (sessionStorage.getItem("loggedIn") === "true") {
         showWallet();
+    } else {
+        document.querySelector(".wallet-section").style.display = "none";
+    }
+    updateBalance();
+});
