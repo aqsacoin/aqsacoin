@@ -22,10 +22,6 @@ h1 {
     margin-bottom: 20px;
 }
 
-.auth-section, .wallet-section {
-    text-align: center;
-}
-
 button {
     background-color: #ff5733;
     color: white;
@@ -38,8 +34,4 @@ button {
 
 button:hover {
     background-color: #ff8d72;
-}
-
-p {
-    margin: 10px 0;
 }
