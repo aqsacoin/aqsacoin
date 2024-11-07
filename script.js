@@ -12,7 +12,7 @@ function generateRecoveryWords() {
 function generateWalletAddress() {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let address = "AQSA-";
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < 32; i++) { // زيادة الطول إلى 32 حرفًا
         address += chars[Math.floor(Math.random() * chars.length)];
     }
     return address;
