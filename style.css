@@ -20,7 +20,6 @@ body {
 h1 {
     color: #f4f4f4;
     margin-bottom: 20px;
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3); /* تحسين وضوح العنوان */
 }
 
 .auth-section, .wallet-section {
@@ -35,17 +34,12 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* إضافة ظل للأزرار */
-    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 button:hover {
     background-color: #ff8d72;
-    transform: translateY(-2px); /* تأثير الرفع للأزرار عند تمرير المؤشر */
 }
 
 p {
-    font-size: 14px;
-    line-height: 1.5;
     margin: 10px 0;
 }
