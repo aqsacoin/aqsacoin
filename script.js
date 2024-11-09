@@ -36,6 +36,7 @@ document.getElementById("registerButton").onclick = function() {
             const recoveryWords = generateRecoveryWords();
             localStorage.setItem("walletAddress", walletAddress);
             localStorage.setItem("recoveryWords", recoveryWords);
+            localStorage.setItem("balance", 0); // رصيد البداية 0
 
             alert("Registration successful!");
             showWallet();
@@ -54,7 +55,7 @@ document.getElementById("loginButton").onclick = function() {
 
     if (username === localStorage.getItem("username") && password === localStorage.getItem("password")) {
         alert("Login successful!");
-        sessionStorage.setItem("loggedIn", true);
+        localStorage.setItem("loggedIn", true);  // تغيير من sessionStorage إلى localStorage
         showWallet();
     } else {
         alert("Incorrect username or password.");
@@ -65,7 +66,7 @@ document.getElementById("loginButton").onclick = function() {
 function showWallet() {
     document.querySelector(".auth-section").style.display = "none";
     document.querySelector(".wallet-section").style.display = "block";
-    document.getElementById("walletAddress").textContent = localStorage.getItem("walletAddress");
+    document.getElementById("walletAddressDisplay").textContent = localStorage.getItem("walletAddress");
     updateBalance();
     updateMiningTimer();
 }
@@ -115,36 +116,48 @@ function formatTime(ms) {
     return `${hours}h ${minutes}m ${seconds}s`;
 }
 
-// إرسال العملات
+// إظهار/إخفاء عنوان المحفظة
+document.getElementById("walletButton").onclick = function() {
+    const walletAddress = document.getElementById("walletAddress");
+    walletAddress.style.display = walletAddress.style.display === "none" ? "block" : "none";
+};
+
+// زر إرسال العملات
 document.getElementById("sendCoinsButton").onclick = function() {
     const recipientAddress = prompt("Enter the recipient's wallet address:");
-    const amount = parseInt(prompt("Enter the amount of AqsaCoins to send:"), 10);
+    const amount = parseInt(prompt("Enter the amount of AqsaCoins to send:"));
 
-    if (recipientAddress && !isNaN(amount) && amount > 0) {
-        let balance = parseInt(localStorage.getItem("balance") || "0", 10);
-        if (balance >= amount) {
-            balance -= amount;
-            localStorage.setItem("balance", balance.toString());
-            alert("Coins sent successfully!");
-            updateBalance();
-        } else {
-            alert("Insufficient balance.");
+    // تحقق من المدخلات
+    if (recipientAddress && amount && amount > 0 && amount <= parseInt(localStorage.getItem("balance") || 0)) {
+        // استرجاع رصيد المرسل إليه (إن وجد) أو تعيين رصيد جديد إذا كانت المحفظة جديدة
+        let recipientBalance = localStorage.getItem("recipientBalance-" + recipientAddress);
+        if (!recipientBalance) {
+            recipientBalance = 0; // إذا كانت المحفظة جديدة، تعيين رصيدها إلى 0
         }
+        
+        // إضافة العملات إلى محفظة المرسل إليه
+        localStorage.setItem("recipientBalance-" + recipientAddress, parseInt(recipientBalance) + amount);
+
+        // خصم العملات من رصيد المرسل
+        localStorage.setItem("balance", (parseInt(localStorage.getItem("balance") || 0) - amount).toString());
+
+        alert(`Successfully sent ${amount} AqsaCoins to ${recipientAddress}.`);
+        updateBalance();
     } else {
-        alert("Invalid input. Please try again.");
+        alert("Invalid address or insufficient balance.");
     }
 };
 
 // زر تسجيل الخروج
 document.getElementById("logoutButton").onclick = function() {
-    sessionStorage.removeItem("loggedIn");
+    localStorage.removeItem("loggedIn");  // تغيير من sessionStorage إلى localStorage
     document.querySelector(".wallet-section").style.display = "none";
     document.querySelector(".auth-section").style.display = "block";
 };
 
 // التأكد من تسجيل الدخول عند تحميل الصفحة
 document.addEventListener("DOMContentLoaded", function() {
-    if (sessionStorage.getItem("loggedIn") === "true") {
+    if (localStorage.getItem("loggedIn") === "true") {  // تغيير من sessionStorage إلى localStorage
         showWallet();
     } else {
         document.querySelector(".wallet-section").style.display = "none";
